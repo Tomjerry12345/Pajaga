@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "39673127786",
+    "project_id": "pajaga-db",
+    "storage_bucket": "pajaga-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39673127786:android:30c621d7e8738af38e7b13",
+        "android_client_info": {
+          "package_name": "com.pajaga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39673127786-7hcc89juuct81ms9rre61jfu741ks642.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pajaga",
+            "certificate_hash": "659859d0a37acbf21bb23eb53b568e8666a4ef1b"
+          }
+        },
+        {
+          "client_id": "39673127786-u63oqojjrpk3lpo5kdri5j4qlse4sfra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU21W6F6_D41d-vElDlFRLCK8QH3t7Q1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39673127786-u63oqojjrpk3lpo5kdri5j4qlse4sfra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
