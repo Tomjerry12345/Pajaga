@@ -1,32 +1,20 @@
 package com.pajaga.ui.autentikasi.register
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.pajaga.R
+import com.pajaga.database.firebase.FirebaseDatabase
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(R.layout.register_fragment) {
 
-    companion object {
-        fun newInstance() = RegisterFragment()
+    private val viewModel: RegisterViewModel by viewModels {
+        RegisterViewModel.Factory(FirebaseDatabase())
     }
 
-    private lateinit var viewModel: RegisterViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.register_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
 }

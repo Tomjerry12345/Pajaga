@@ -20,7 +20,6 @@
         android:theme="@style/Theme.MyBaseProjectAndroid"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -34,9 +33,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
-        <!-- Configuration -->
+            android:value="${MAPS_API_KEY}" /> <!-- Configuration -->
         <!-- [START fcm_default_icon] -->
         <!--
  Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -62,35 +59,39 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <!-- Last Configuration -->
-
+        </service> <!-- Last Configuration -->
         <!-- Activity -->
         <activity
             android:name=".ui.autentikasi.AutentikasiActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".ui.examples.ExamplesActivity"
             android:exported="true" />
+
+<!--        Testing-->
+
+        <activity
+            android:name=".ui.TestingActivity"
+            android:exported="true"
+            android:label="Testing App">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
     </application>
 
 </manifest>
