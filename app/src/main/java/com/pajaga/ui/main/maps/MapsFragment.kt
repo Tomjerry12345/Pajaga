@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,11 +32,16 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.gson.Gson
 import com.pajaga.BuildConfig
 import com.pajaga.R
+import com.pajaga.model.GoogleMapsModel
 import com.pajaga.ui.main.home.HomeFragment
 import com.pajaga.ui.main.home.HomeViewModel
 import com.pajaga.utils.other.showLogAssert
+import com.pajaga.utils.other.showToast
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
 
 class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     GoogleMap.OnPolylineClickListener, GoogleMap.OnPolygonClickListener {
@@ -64,6 +72,23 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
         HomeViewModel.Factory()
     }
 
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        permissions.entries.forEach {
+//            Log.e("DEBUG", )
+            showLogAssert("requestMultiplePermissions", "${it.key} = ${it.value}")
+            locationPermissionGranted = it.value
+
+        }
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI()
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation()
+
+        getLineRoads()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,7 +96,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
 
         showLogAssert("onViewCreated", "true")
 
-        val mapFragment = requireActivity().supportFragmentManager
+        val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
@@ -101,6 +126,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     // [START maps_current_place_on_options_item_selected]
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.option_get_place) {
+            showLogAssert("onOptionsItemSelected", "true")
             showCurrentPlace()
         }
         return true
@@ -160,27 +186,55 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
         // [END map_current_place_set_info_window_adapter]
 
         // Prompt the user for permission.
-        getLocationPermission()
+        getPermission()
+//        getLocationPermission()
         // [END_EXCLUDE]
 
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI()
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation()
-
     }
+
+    private fun getPermission() {
+        requestMultiplePermissions.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE
+            )
+        )
+
+//        updateLocationUI()
+    }
+
+    fun getLineRoads() {
+        val location1 = LatLng(-5.205273,119.497741)
+        map?.addMarker(MarkerOptions().position(location1).title("My Location"))
+//        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(location1,5f))
+
+//        Log.d("GoogleMap", "before location2")
+//        val location2 = LatLng(9.89,78.11)
+//        map?.addMarker(MarkerOptions().position(location2).title("Madurai"))
+
+        Log.d("GoogleMap", "before location3")
+
+        val location2 = LatLng(-5.205881,119.497174)
+        map?.addMarker(MarkerOptions().position(location2).title("Bangalore"))
+
+        Log.d("GoogleMap", "before URL")
+        val URL = getDirectionURL(location1,location2)
+        showLogAssert("GoogleMap", "URL : $URL")
+        GetDirection(URL).execute()
+    }
+
 
     // [START maps_current_place_get_device_location]
     @SuppressLint("MissingPermission")
     private fun getDeviceLocation() {
+        showLogAssert("getDeviceLocation", "$locationPermissionGranted")
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
          */
         try {
             if (locationPermissionGranted) {
-                showLogAssert("locationPermissionGranted", "true")
                 val locationResult = fusedLocationProviderClient.lastLocation
                 locationResult.addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
@@ -195,6 +249,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
                                     ), DEFAULT_ZOOM.toFloat()
                                 )
                             )
+
+//                            addPolyline()
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
@@ -215,27 +271,122 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     }
     // [END maps_current_place_get_device_location]
 
+    fun getDirectionURL(origin:LatLng,dest:LatLng) : String{
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=driving&key=${BuildConfig.MAPS_API_KEY}"
+    }
 
-    private fun getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            locationPermissionGranted = true
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-            )
+    fun addPolyline() {
+        map?.addPolyline(
+            PolylineOptions()
+                .add(LatLng(-5.205066, 119.497672), LatLng(-5.205469, 119.498976))
+                .width(25f)
+                .color(Color.BLUE)
+                .geodesic(true)
+        )
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
+        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            val data = response.body()!!.string()
+            showLogAssert("GoogleMap" , " data : $data")
+            val result =  ArrayList<List<LatLng>>()
+            try{
+                val respObj = Gson().fromJson(data,GoogleMapsModel::class.java)
+
+                val path =  ArrayList<LatLng>()
+
+                showLogAssert("respObj", "$respObj")
+
+                for (i in 0 until respObj.routes[0].legs[0].steps.size){
+//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
+//                    path.add(startLatLng)
+//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
+                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
+                }
+                result.add(path)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: List<List<LatLng>>) {
+            val lineoption = PolylineOptions()
+            for (i in result.indices){
+                lineoption.addAll(result[i])
+                lineoption.width(10f)
+                lineoption.color(Color.BLUE)
+                lineoption.geodesic(true)
+            }
+            map?.addPolyline(lineoption)
         }
     }
+
+    fun decodePolyline(encoded: String): List<LatLng> {
+
+        val poly = ArrayList<LatLng>()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+
+            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
+            poly.add(latLng)
+        }
+
+        return poly
+    }
+
+
+//    private fun getLocationPermission() {
+//        /*
+//         * Request location permission, so that we can get the location of the
+//         * device. The result of the permission request is handled by a callback,
+//         * onRequestPermissionsResult.
+//         */
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            )
+//            == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            showLogAssert("getLocationPermission", "true")
+//            locationPermissionGranted = true
+//        } else {
+//            ActivityCompat.requestPermissions(
+//                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+//            )
+//        }
+//    }
 
     /**
      * Prompts the user to select the current place from a list of likely places, and shows the
@@ -305,7 +456,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
             )
 
             // Prompt the user for permission.
-            getLocationPermission()
+//            getLocationPermission()
+//            getPermission()
         }
     }
     // [END maps_current_place_show_current_place]
@@ -360,6 +512,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     // [START maps_current_place_update_location_ui]
     @SuppressLint("MissingPermission")
     private fun updateLocationUI() {
+//        showLogAssert("updateLocationUI", "$locationPermissionGranted")
         if (map == null) {
             return
         }
@@ -371,7 +524,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
                 map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
-                getLocationPermission()
+//                getLocationPermission()
+//                getPermission()
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
@@ -379,28 +533,28 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     }
     // [END maps_current_place_update_location_ui]
 
-    // [START maps_current_place_on_request_permissions_result]
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        locationPermissionGranted = false
-        when (requestCode) {
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    locationPermissionGranted = true
-                }
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-        updateLocationUI()
-    }
-    // [END maps_current_place_on_request_permissions_result]
+//    // [START maps_current_place_on_request_permissions_result]
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<String>,
+//        grantResults: IntArray
+//    ) {
+//        locationPermissionGranted = false
+//        when (requestCode) {
+//            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+//
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.isNotEmpty() &&
+//                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    locationPermissionGranted = true
+//                }
+//            }
+//            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        }
+//        updateLocationUI()
+//    }
+//    // [END maps_current_place_on_request_permissions_result]
 
     override fun onPolylineClick(p0: Polyline) {
         TODO("Not yet implemented")
