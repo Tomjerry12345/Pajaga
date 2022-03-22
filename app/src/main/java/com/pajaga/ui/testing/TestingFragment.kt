@@ -1,32 +1,59 @@
 package com.pajaga.ui.testing
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.google.firebase.messaging.FirebaseMessaging
 import com.pajaga.R
+import com.pajaga.database.retrofit.RetrofitInstance
+import com.pajaga.model.NotificationData
+import com.pajaga.model.PushNotification
+import com.pajaga.service.firebase.FirebaseService
+import com.pajaga.utils.other.showLogAssert
 
-class TestingFragment : Fragment() {
+const val TOPIC = "/topics/testing"
 
-    companion object {
-        fun newInstance() = TestingFragment()
+class TestingFragment : Fragment(R.layout.testing_fragment) {
+
+    private val viewModel: TestingViewModel by viewModels {
+        TestingViewModel.Factory()
     }
 
-    private lateinit var viewModel: TestingViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.testing_fragment, container, false)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            FirebaseService.token = it
+//            showToast(requireContext(), it)
+            showLogAssert("token", it)
+//            etToken.setText(it.token)
+        }
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+
+        PushNotification(
+            NotificationData("test", "test message"),
+            FirebaseService.token!!
+        ).also {
+            viewModel.getResponse(it).observe(viewLifecycleOwner) {
+                showLogAssert("response", "$it")
+            }
+        }
+
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TestingViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+//    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            val response = RetrofitInstance.api.postNotification(notification)
+//            if(response.isSuccessful) {
+//                showLogAssert("response", "Response: ${Gson().toJson(response)}")
+//            } else {
+//                showLogAssert("error", response.errorBody().toString())
+//            }
+//        } catch(e: Exception) {
+//            showLogAssert("exception", e.toString())
+//        }
+//    }
 
 }

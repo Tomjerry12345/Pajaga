@@ -21,6 +21,6 @@ object Constant {
 
     // fcm
     const val BASE_URL_FCM = "https://fcm.googleapis.com"
-    const val SERVER_KEY = "ENTER SERVER KEY HERE"
+    const val SERVER_KEY = "AAAACTyz42o:APA91bHtV4T7lNBXIOdr4M0cCmi71p1jQzxvhsaudq0LAQBGxIN12YR6Iy8nlxUO9VXEiMQvMx29rO5mFadHS3lKYbQbilSH1SMAaP9_EsCiZttxBAAEP9QFg0gmOC_W3CS1E2RzSr7o"
     const val CONTENT_TYPE = "application/json"
 }
