@@ -3,14 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/drawable/bg_input.xml" value="0.1645" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/drawable/ic_eye_off.xml" value="0.1645" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/drawable/outer_primary.xml" value="0.1645" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/drawable/show_password_selector.xml" value="0.1645" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/font/font.xml" value="0.20989583333333334" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/layout/home_fragment.xml" value="0.15896739130434784" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/layout/login_fragment.xml" value="0.16666666666666666" />
-        <entry key="..\:/Project/Pajaga/Pajaga/app/src/main/res/layout/register_fragment.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/ARMAN/3D Objects/MyBaseProjectAndroid/app/src/main/res/layout/examples_api_add_fragment.xml" value="0.17074275362318841" />
         <entry key="..\:/Users/ARMAN/3D Objects/MyBaseProjectAndroid/app/src/main/res/layout/examples_api_fragment.xml" value="0.1" />
         <entry key="..\:/Users/ARMAN/3D Objects/MyBaseProjectAndroid/app/src/main/res/layout/examples_custom_alert_dialog.xml" value="0.1" />
@@ -40,11 +32,12 @@
         <entry key="..\:/luffy-dev/Project/Android/Pajaga/app/src/main/res/layout/login_fragment.xml" value="0.1" />
         <entry key="..\:/luffy-dev/Project/Android/Pajaga/app/src/main/res/layout/maps_fragment.xml" value="0.1" />
         <entry key="..\:/luffy-dev/Project/Android/Pajaga/app/src/main/res/layout/news_fragment.xml" value="0.1" />
+        <entry key="..\:/luffy-dev/Project/Android/Pajaga/app/src/main/res/layout/testing_fragment.xml" value="0.1" />
         <entry key="..\:/luffy-dev/Project/Android/Pajaga/app/src/main/res/menu/current_place_menu.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

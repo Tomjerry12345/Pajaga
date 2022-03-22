@@ -17,11 +17,13 @@ import com.pajaga.R
 import com.pajaga.ui.main.MainActivity
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
+import com.pajaga.utils.other.showLogAssert
 import kotlin.random.Random
 
 private const val CHANNEL_ID = "my_channel"
 
-class FirebaseMessagingService: FirebaseMessagingService() {
+class FirebaseService: FirebaseMessagingService() {
+
     companion object {
         var sharedPref: SharedPreferences? = null
 
@@ -45,6 +47,8 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         val intent = Intent(this, MainActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
+
+        showLogAssert("message", "${message.data}")
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
