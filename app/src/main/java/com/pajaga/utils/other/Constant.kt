@@ -11,9 +11,16 @@ object Constant {
     const val examplesKeySavedDataString = "examples"
     const val examplesKeySavedDataObject = "examples"
 
+    const val KEY_TOKEN = "token"
+
     // retrofit base url
     const val BASE_URL = "http://192.168.1.16:4000/"
 
     // list dropdown examples
     val exampleListDropwdownText = listOf("dropdown 1", "dropdown 2")
+
+    // fcm
+    const val BASE_URL_FCM = "https://fcm.googleapis.com"
+    const val SERVER_KEY = "ENTER SERVER KEY HERE"
+    const val CONTENT_TYPE = "application/json"
 }

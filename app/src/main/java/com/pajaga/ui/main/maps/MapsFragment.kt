@@ -271,7 +271,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback,
     }
     // [END maps_current_place_get_device_location]
 
-    fun getDirectionURL(origin:LatLng,dest:LatLng) : String{
+    private fun getDirectionURL(origin:LatLng, dest:LatLng) : String{
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=driving&key=${BuildConfig.MAPS_API_KEY}"
     }
 
