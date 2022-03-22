@@ -1,9 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.main.home.HomeFragment">
+
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="@dimen/_50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:src="@drawable/icon"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/img_icon"
+        app:layout_constraintTop_toTopOf="@id/img_icon"
+        app:layout_constraintBottom_toBottomOf="@id/img_icon"
+        android:text="Pajaga"
+        android:textSize="@dimen/_25dp"
+        style="@style/TitleInput"/>
+
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="@dimen/_30dp"
+        android:layout_height="@dimen/_30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_icon"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layout_constraintBottom_toBottomOf="@id/img_icon"
+        android:src="@drawable/user"/>
+
+    <ImageView
+        android:layout_width="@dimen/_27dp"
+        android:layout_height="@dimen/_27dp"
+        app:layout_constraintEnd_toStartOf="@id/profile"
+        app:layout_constraintTop_toTopOf="@id/img_icon"
+        app:layout_constraintBottom_toBottomOf="@id/img_icon"
+        android:src="@drawable/notification"
+        android:layout_marginEnd="@dimen/_18dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/img_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_21dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:cardCornerRadius="@dimen/_8dp"
+        app:cardBackgroundColor="#F1F3F6">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_16dp"
+            >
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.7" />
+
+            <TextView
+                android:id="@id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Protection"
+                style="@style/titleHome"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                android:layout_marginEnd="@dimen/_16dp"
+                android:text="@string/desc_protetc"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                android:background="@drawable/dotted_line" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:checked="true"
+                android:text="Active"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/_16dp"
+                android:theme="@style/SCBSwitch"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <View
+        android:id="@+id/div1"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="#E5E5E5"
+        app:layout_constraintTop_toBottomOf="@id/card"
+        android:layout_marginTop="@dimen/_18dp"/>
+
+    <TextView
+        android:id="@+id/title_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/div1"
+        android:layout_marginTop="@dimen/_18dp"
+        style="@style/titleHome"
+        android:layout_marginStart="@dimen/_16dp"
+        android:text="Contact"/>
+
+    <TextView
+        android:id="@+id/sub_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title_contact"
+        android:text="People who really care about you"
+        android:layout_marginStart="@dimen/_16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/poppins_medium"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/sub_contact"
+        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+    <View
+        android:id="@+id/div2"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="#E5E5E5"
+        app:layout_constraintTop_toBottomOf="@id/rv_contact"
+        android:layout_marginTop="@dimen/_18dp"/>
+
+    <TextView
+        android:id="@+id/title_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/div2"
+        android:layout_marginTop="@dimen/_18dp"
+        style="@style/titleHome"
+        android:layout_marginStart="@dimen/_16dp"
+        android:text="Red Zone"/>
+
+    <TextView
+        android:id="@+id/sub_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title_zone"
+        android:text="Danger road near you"
+        android:layout_marginStart="@dimen/_16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/poppins_medium"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_zone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/sub_zone"
+        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+
+
+
+
+
+
+
 
 
 
