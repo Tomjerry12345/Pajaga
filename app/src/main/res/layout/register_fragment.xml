@@ -1,13 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.autentikasi.register.RegisterFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        style="@style/TitleBlue"
+        android:text="Create New Account "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="@dimen/_8dp"
+        style="@style/TitleInput"
+        android:text="Email"
+        app:layout_constraintBottom_toTopOf="@id/IL_email"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/IL_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Your email address"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/teepass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginBottom="@dimen/_8dp"
+        style="@style/TitleInput"
+        android:text="Password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline1" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtInputLayoutPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layout_constraintTop_toBottomOf="@id/teepass"
+        app:passwordToggleDrawable="@drawable/show_password_selector"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/blackTrans50">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Your Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingHorizontal="@dimen/_10dp"
+            android:textColor="@color/blackTrans50" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/txtConf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginBottom="@dimen/_8dp"
+        style="@style/TitleInput"
+        android:text="Confirmation Password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtInputLayoutPass" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtInputLayoutConf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        app:layout_constraintTop_toBottomOf="@id/txtConf"
+        app:passwordToggleDrawable="@drawable/show_password_selector"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/blackTrans50">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etConf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Your Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingHorizontal="@dimen/_10dp"
+            android:textColor="@color/blackTrans50" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:layout_marginBottom="@dimen/_32dp"
+        android:background="@drawable/bg_input"
+        style="@style/ButtonBigBlue"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Login"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
