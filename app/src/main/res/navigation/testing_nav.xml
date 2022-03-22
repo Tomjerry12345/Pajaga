@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/testing_nav"
-    app:startDestination="@id/testingFragment">
+    app:startDestination="@id/mapsFragment">
     <fragment
-        android:id="@+id/testingFragment"
-        android:name="com.pajaga.ui.testing.TestingFragment"
-        android:label="testing_fragment"
-        tools:layout="@layout/testing_fragment" />
+        android:id="@+id/mapsFragment"
+        android:name="com.pajaga.ui.main.maps.MapsFragment"
+        android:label="MapsFragment"
+        tools:layout="@layout/maps_fragment"/>
 </navigation>
