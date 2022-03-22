@@ -12,6 +12,8 @@ object Constant {
     const val examplesKeySavedDataObject = "examples"
 
     const val KEY_TOKEN = "token"
+    const val ONACTIVED_KEY_VOLUME = "key volume"
+    const val SUM_PLUS = "sum plus"
 
     // retrofit base url
     const val BASE_URL = "http://192.168.1.16:4000/"
