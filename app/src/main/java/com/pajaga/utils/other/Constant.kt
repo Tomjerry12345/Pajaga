@@ -15,6 +15,10 @@ object Constant {
     const val ONACTIVED_KEY_VOLUME = "key volume"
     const val SUM_PLUS = "sum plus"
 
+    // KEY location
+    const val KEY_LATITUDE = "latitude"
+    const val KEY_LONGITUDE = "longitude"
+
     // retrofit base url
     const val BASE_URL = "http://192.168.1.16:4000/"
 

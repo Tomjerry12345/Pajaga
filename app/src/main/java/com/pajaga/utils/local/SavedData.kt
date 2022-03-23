@@ -37,6 +37,17 @@ object SavedData {
         return sharedPref.getInt(key, 0)
     }
 
+    fun setFloat(key: String, params: Float) {
+        with (sharedPref.edit()) {
+            putFloat(key, params)
+            commit()
+        }
+    }
+
+    fun getFloat(key: String): Float {
+        return sharedPref.getFloat(key, 0F)
+    }
+
     fun setBoolean(key: String, params: Boolean) {
         with (sharedPref.edit()) {
             putBoolean(key, params)
