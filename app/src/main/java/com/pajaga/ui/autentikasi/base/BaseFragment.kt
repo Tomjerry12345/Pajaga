@@ -1,27 +1,60 @@
 package com.pajaga.ui.autentikasi.base
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pajaga.R
 
 
-class BaseFragment : Fragment() {
+@Suppress("DEPRECATION")
+class BaseFragment : Fragment(R.layout.fragment_base) {
+
+    private lateinit var viewPagerr : ViewPager
+    var exit = false
+
+    private lateinit var bottomNavBar : BottomNavigationView
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
+        setViewPagerAdapter()
+        setBottomNavigation()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base, container, false)
+    private fun onBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (exit) {
+                    activity?.finish()
+                    return
+                } else {
+                    exit = true
+                    Handler().postDelayed({ exit = false }, 2000)
+                }
+            }
+        })    }
+
+    private fun setBottomNavigation() {
+        bottomNavBar.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.menu_home -> viewPagerr.currentItem = 0
+                R.id.menu_news -> viewPagerr.currentItem = 2
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
+    }
+
+    private fun setViewPagerAdapter() {
+        viewPagerr.adapter = MainPagerAdapter(childFragmentManager)
+
     }
 
 

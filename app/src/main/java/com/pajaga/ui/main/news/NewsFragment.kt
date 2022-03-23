@@ -8,6 +8,12 @@ import com.pajaga.R
 
 class NewsFragment : Fragment(R.layout.news_fragment) {
 
+    companion object{
+        fun newInstance(): NewsFragment{
+            return NewsFragment()
+        }
+    }
+
     private val viewModel: NewsViewModel by viewModels {
         NewsViewModel.Factory()
     }
