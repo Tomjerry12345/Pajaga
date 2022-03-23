@@ -9,6 +9,7 @@ import com.pajaga.R
 import com.pajaga.model.NotificationData
 import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
+import com.pajaga.service.handphone.PlayerService
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.showLogAssert
@@ -38,17 +39,20 @@ class TestingFragment : Fragment(R.layout.testing_fragment) {
 
         showLogAssert("sumplus", SavedData.getInt(Constant.SUM_PLUS).toString())
 
-        if (SavedData.getInt(Constant.SUM_PLUS) == 3) {
-            SavedData.setInt(Constant.SUM_PLUS, 0)
-            PushNotification(
-                NotificationData("test", "test message"),
-                FirebaseService.token!!
-            ).also {
-                viewModel.getResponse(it).observe(viewLifecycleOwner) {
-                    showLogAssert("response", "$it")
-                }
-            }
-        }
+        PlayerService.viewModel = viewModel
+        PlayerService.viewLifecycleOwner = viewLifecycleOwner
+
+//        if (SavedData.getInt(Constant.SUM_PLUS) == 3) {
+//            SavedData.setInt(Constant.SUM_PLUS, 0)
+//            PushNotification(
+//                NotificationData("test", "test message"),
+//                FirebaseService.token!!
+//            ).also {
+//                viewModel.getResponse(it).observe(viewLifecycleOwner) {
+//                    showLogAssert("response", "$it")
+//                }
+//            }
+//        }
 
 
     }
