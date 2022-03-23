@@ -68,7 +68,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
     private lateinit var dangerPointsPlace1: List<LatLng>
 
     private val viewModel: MapsViewModel by viewModels {
-        HomeViewModel.Factory()
+        MapsViewModel.Factory()
     }
 
     private val requestMultiplePermissions =

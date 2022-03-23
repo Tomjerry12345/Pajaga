@@ -11,7 +11,7 @@ import com.pajaga.databinding.LoginFragmentBinding
 class LoginFragment : Fragment(R.layout.login_fragment) {
 
     private val viewModel: LoginViewModel by viewModels {
-        LoginViewModel.Factory(FirebaseDatabase())
+        LoginViewModel.Factory(FirebaseDatabase(), requireActivity())
     }
 
     private lateinit var binding: LoginFragmentBinding

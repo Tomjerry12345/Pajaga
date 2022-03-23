@@ -79,9 +79,9 @@
                 android:background="@android:color/white"
                 android:fontFamily="@font/poppins_medium"
                 android:hint="Your email address"
+                android:text="@={viewModel.email}"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-
                 />
 
 
@@ -119,6 +119,7 @@
                 android:background="@android:color/white"
                 android:fontFamily="@font/poppins_medium"
                 android:hint="Your Password"
+                android:text="@={viewModel.password}"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:paddingHorizontal="@dimen/_10dp"
@@ -126,7 +127,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_16dp"
@@ -134,7 +135,7 @@
             android:layout_marginBottom="@dimen/_16dp"
             android:background="@drawable/bg_input"
             style="@style/ButtonBigBlue"
-
+            android:onClick="@{(view) -> viewModel.onMoveToHome(view)}"
             app:layout_constraintBottom_toTopOf="@id/parentsignup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Sign Up"
+                android:onClick="@{(view) -> viewModel.onMoveToRegister(view)}"
                 android:textColor="@color/primary"
                 android:textSize="@dimen/_16sp" />
         </LinearLayout>
