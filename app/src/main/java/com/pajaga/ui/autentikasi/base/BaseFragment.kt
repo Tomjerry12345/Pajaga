@@ -19,7 +19,7 @@ class BaseFragment : Fragment(R.layout.fragment_base) {
     var exit = false
 
     private lateinit var bottomNavBar : BottomNavigationView
-
+//    private lateinit var binding :
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
