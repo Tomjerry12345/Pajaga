@@ -37,8 +37,6 @@ class TestingFragment : Fragment(R.layout.testing_fragment) {
 
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
-        showLogAssert("sumplus", SavedData.getInt(Constant.SUM_PLUS).toString())
-
         PlayerService.viewModel = viewModel
         PlayerService.viewLifecycleOwner = viewLifecycleOwner
 

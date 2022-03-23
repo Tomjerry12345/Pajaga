@@ -52,7 +52,6 @@ class PlayerService: Service() {
                     SavedData.setInt(Constant.SUM_PLUS, i.plus(1))
                     showLogAssert("direction", "$i")
                     if (i == 2) {
-                        showLogAssert("intent", "$intent")
                         SavedData.setInt(Constant.SUM_PLUS, 0)
                         PushNotification(
                             NotificationData("test", "test message"),
