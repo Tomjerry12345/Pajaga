@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
-
+    app:startDestination="@id/baseFragment">
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.pajaga.ui.main.home.HomeFragment"
-        android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+        android:id="@+id/baseFragment"
+        android:name="com.pajaga.ui.autentikasi.base.BaseFragment"
+        android:label="BaseFragment" />
 </navigation>

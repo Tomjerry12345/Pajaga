@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pajaga.R
+import com.pajaga.databinding.FragmentBaseBinding
 
 
 @Suppress("DEPRECATION")
@@ -19,14 +20,24 @@ class BaseFragment : Fragment(R.layout.fragment_base) {
     var exit = false
 
     private lateinit var bottomNavBar : BottomNavigationView
-//    private lateinit var binding :
+    private lateinit var binding : FragmentBaseBinding
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
+        binding = FragmentBaseBinding.bind(view)
+        viewPagerr = binding.fragmentContainer
+
+        bottomNavBar = binding.bottomNavigationView
+
         setViewPagerAdapter()
         setBottomNavigation()
+        viewPagerr = binding.fragmentContainer
+
+        binding.bottomAppBar.setOnClickListener {
+
+        }
     }
 
     private fun onBackPressed() {
