@@ -1,4 +1,4 @@
-package com.pajaga.ui.main.home
+package com.pajaga.ui.main.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -25,7 +25,7 @@ class ContactAdapter(val list: ArrayList<Contact>) : RecyclerView.Adapter<Contac
 
     }
 
-    override fun onBindViewHolder(holder: ContactAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list.get(position)
         holder.bind(item)
 

@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pajaga.R
 import com.pajaga.databinding.FragmentBaseBinding
+import com.pajaga.utils.other.showLogAssert
 import com.pajaga.utils.system.moveNavigationTo
 
 
@@ -25,6 +26,7 @@ class BaseFragment : Fragment(R.layout.fragment_base) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
+        showLogAssert("BaseFragment", "true")
         binding = FragmentBaseBinding.bind(view)
         viewPagerr = binding.fragmentContainer
 
