@@ -8,13 +8,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pajaga.R
-import com.pajaga.ui.main.MainActivity
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.showLogAssert
@@ -22,7 +23,7 @@ import kotlin.random.Random
 
 private const val CHANNEL_ID = "my_channel"
 
-class FirebaseService: FirebaseMessagingService() {
+class FirebaseService : FirebaseMessagingService() {
 
     companion object {
         var sharedPref: SharedPreferences? = null
@@ -43,14 +44,28 @@ class FirebaseService: FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        val latitude = SavedData.getFloat(Constant.KEY_LATITUDE)
+        val longitude = SavedData.getFloat(Constant.KEY_LONGITUDE)
+        val mediaPlayer = MediaPlayer.create(this, R.raw.notification)
+        mediaPlayer.start()
+//        pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
+//
+//        val intent = Intent(this, MainActivity::class.java)
+        // Create a Uri from an intent string. Use the result to create an Intent.
+//        val gmmIntentUri = Uri.parse("geo:37.7749,-122.4194")
+        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude")
 
-        val intent = Intent(this, MainActivity::class.java)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+        val intent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+// Make the Intent explicit by setting the Google Maps package
+        intent.setPackage("com.google.android.apps.maps")
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
 
         showLogAssert("message", "${message.data}")
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
 
@@ -70,11 +85,18 @@ class FirebaseService: FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channelName = "channelName"
-        val channel = NotificationChannel(CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            channelName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
             description = "My channel description"
             enableLights(true)
+            enableVibration(true)
             lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)
     }
+
+
 }
