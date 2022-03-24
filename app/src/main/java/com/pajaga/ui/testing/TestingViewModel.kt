@@ -22,17 +22,12 @@ class TestingViewModel() : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val response = RetrofitInstance.api.postNotification(pushNotification)
+                    val response = RetrofitInstance.apiNotif.postNotification(pushNotification)
                     if (response.isSuccessful) {
                         showLogAssert("response", "Response: ${Gson().toJson(response)}")
                     } else {
                         showLogAssert("error", response.errorBody().toString())
                     }
-//                    val resultConnection = examplesApiRepository.checkConnection()
-//                    if (resultConnection.code == 200) {
-//                        val resultData = examplesApiRepository.getData()
-//                        data.postValue(Response.Changed(resultData))
-//                    }
                 } catch (throwable: Throwable) {
                     when (throwable) {
                         is IOException -> {

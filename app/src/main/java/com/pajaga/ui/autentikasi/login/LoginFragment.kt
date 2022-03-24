@@ -25,7 +25,7 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
         moveToHome()
     }
 
-    fun moveToHome() {
+    private fun moveToHome() {
         binding.mbLogin.setOnClickListener {
             viewModel.onMoveToHome(binding, it)
         }

@@ -6,6 +6,22 @@
     app:startDestination="@id/baseFragment">
     <fragment
         android:id="@+id/baseFragment"
-        android:name="com.pajaga.ui.autentikasi.base.BaseFragment"
-        android:label="BaseFragment" />
+        android:name="com.pajaga.ui.base.BaseFragment"
+        android:label="BaseFragment"
+        tools:layout="@layout/fragment_base">
+        <action
+            android:id="@+id/action_baseFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.pajaga.ui.main.maps.MapsFragment"
+        android:label="MapsFragment"
+        tools:layout="@layout/maps_fragment">
+        <action
+            android:id="@+id/action_mapsFragment_to_baseFragment"
+            app:destination="@id/baseFragment"
+            app:popUpTo="@id/mapsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -1,9 +1,8 @@
-package com.pajaga.ui.autentikasi.base
+package com.pajaga.ui.base
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.pajaga.ui.main.home.HomeFragment
 import com.pajaga.ui.main.news.NewsFragment
 

@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -15,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,6 +39,7 @@ import com.pajaga.ui.main.home.HomeFragment
 import com.pajaga.ui.main.home.HomeViewModel
 import com.pajaga.utils.other.showLogAssert
 import com.pajaga.utils.other.showToast
+import com.pajaga.utils.system.moveNavigationTo
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 
@@ -89,7 +92,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        onBackPressed()
         setHasOptionsMenu(true)
 
         showLogAssert("onViewCreated", "true")
@@ -565,6 +568,16 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 
         showToast(requireContext(), "Jalur aman")
         showLogAssert("info", "jalur aman")
+    }
+
+    private fun onBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    moveNavigationTo(requireView(), R.id.action_mapsFragment_to_baseFragment)
+                }
+            })
     }
 
     companion object {
