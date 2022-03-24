@@ -21,7 +21,14 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
 
         binding = LoginFragmentBinding.bind(view)
         binding.viewModel = viewModel
+
+        moveToHome()
     }
 
+    fun moveToHome() {
+        binding.mbLogin.setOnClickListener {
+            viewModel.onMoveToHome(binding, it)
+        }
+    }
 
 }
