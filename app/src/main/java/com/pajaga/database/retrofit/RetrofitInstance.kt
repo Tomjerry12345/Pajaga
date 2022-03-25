@@ -1,6 +1,7 @@
 package com.pajaga.database.retrofit
 
 import com.pajaga.utils.other.Constant.BASE_URL_FCM
+import com.pajaga.utils.other.Constant.BASE_URL_NEWS
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,7 +21,7 @@ class RetrofitInstance() {
 
         private val retrofitNews by lazy {
             Retrofit.Builder()
-                .baseUrl(BASE_URL_FCM)
+                .baseUrl(BASE_URL_NEWS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }

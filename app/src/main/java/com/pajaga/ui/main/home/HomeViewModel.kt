@@ -101,35 +101,6 @@ class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView) : Vi
                 }
 //            }
         }
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                try {
-//                    showLogAssert("test response", "true")
-//                    val response = RetrofitInstance.apiNotif.postNotification(pushNotification)
-//                    showLogAssert("after response", "true")
-//                    if (response.isSuccessful) {
-//                        showLogAssert("response", "Response: ${Gson().toJson(response)}")
-//                    } else {
-//                        showLogAssert("error", response.errorBody().toString())
-//                    }
-//                } catch (throwable: Throwable) {
-//                    when (throwable) {
-//                        is IOException -> {
-//                            data.postValue(Response.Error("Network Error => ${throwable.message}"))
-//                        }
-//                        is HttpException -> {
-//                            val code = throwable.code()
-//                            val errorResponse = throwable.message()
-//                            data.postValue(Response.Error("Error $code $errorResponse"))
-//                        }
-//                        else -> {
-//                            data.postValue(Response.Error("Unknown Error => ${throwable.message}"))
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
         return data
     }
 

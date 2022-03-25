@@ -7,6 +7,9 @@ import androidx.fragment.app.viewModels
 import com.pajaga.R
 import com.pajaga.databinding.HomeFragmentBinding
 import com.pajaga.databinding.NewsFragmentBinding
+import com.pajaga.model.NewsModel
+import com.pajaga.utils.network.Response
+import com.pajaga.utils.other.showLogAssert
 
 class NewsFragment : Fragment(R.layout.news_fragment) {
 
@@ -28,6 +31,17 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
 
         binding = NewsFragmentBinding.bind(view)
         viewModel.setDataNews()
+        viewModel.getResponse().observe(viewLifecycleOwner) {
+            when(it)  {
+                is Response.Changed -> {
+                    val data = it.data as NewsModel
+                    val listData = data.results
+                    showLogAssert("data", "${listData?.size}")
+                }
+                is Response.Error -> showLogAssert("error", it.error)
+                is Response.Success -> TODO()
+            }
+        }
     }
 
 }

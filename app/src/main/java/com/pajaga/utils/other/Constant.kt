@@ -29,4 +29,8 @@ object Constant {
     const val BASE_URL_FCM = "https://fcm.googleapis.com"
     const val SERVER_KEY = "AAAACTyz42o:APA91bHtV4T7lNBXIOdr4M0cCmi71p1jQzxvhsaudq0LAQBGxIN12YR6Iy8nlxUO9VXEiMQvMx29rO5mFadHS3lKYbQbilSH1SMAaP9_EsCiZttxBAAEP9QFg0gmOC_W3CS1E2RzSr7o"
     const val CONTENT_TYPE = "application/json"
+
+    // news
+    const val BASE_URL_NEWS = "https://newsdata.io"
+    const val API_KEY_NEWS = "pub_576787425b621b5b303a8af432758da02525"
 }

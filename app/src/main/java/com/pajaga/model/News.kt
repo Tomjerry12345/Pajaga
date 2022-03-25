@@ -5,5 +5,6 @@ data class News(
     var link : String? = "",
     var pubDate : String? = "",
     var img_url : String? = "",
-    var source_id : String? = ""
+    var source_id : String? = "",
+    var content: String? = ""
 )
