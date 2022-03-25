@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.gson.Gson
 import com.pajaga.BuildConfig
 import com.pajaga.R
+import com.pajaga.databinding.MapsFragmentBinding
 import com.pajaga.model.GoogleMapsModel
 import com.pajaga.ui.main.home.HomeFragment
 import com.pajaga.ui.main.home.HomeViewModel
@@ -74,6 +76,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         MapsViewModel.Factory()
     }
 
+    private lateinit var binding: MapsFragmentBinding
+
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
@@ -95,7 +99,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         onBackPressed()
         setHasOptionsMenu(true)
 
-        showLogAssert("onViewCreated", "true")
+        binding = MapsFragmentBinding.bind(view)
 
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
@@ -107,6 +111,25 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        binding.inputDestination.editText?.setOnEditorActionListener { textView, i, keyEvent ->
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
+                showLogAssert("Ime", "search")
+                if (lastKnownLocation != null) {
+                    val location1 =
+                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    val location2 = "UIN Alauddin Makassar"
+//                            val location2 = "Metrotech Digital Asia, Jalan Toddopuli 10, Borong, Makassar City, South Sulawesi"
+                    val url = getDirectionURL1(location1, location2)
+                    GetDirection(url).execute()
+                } else {
+                    showLogAssert("error", "null lastKnownLocation")
+                }
+
+                return@setOnEditorActionListener true;
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     /**
@@ -246,12 +269,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
                                 )
                             )
 
-                            val location1 =
-                                LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-                            val location2 = "UIN Alauddin Makassar"
-//                            val location2 = "Metrotech Digital Asia, Jalan Toddopuli 10, Borong, Makassar City, South Sulawesi"
-                            val url = getDirectionURL1(location1, location2)
-                            GetDirection(url).execute()
+
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
