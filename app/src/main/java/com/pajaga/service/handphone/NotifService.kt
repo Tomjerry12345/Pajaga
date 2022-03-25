@@ -5,25 +5,20 @@ import android.content.Intent
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.media.VolumeProviderCompat
 import com.pajaga.model.NotificationData
 import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
-import com.pajaga.ui.TestingActivity
 import com.pajaga.ui.main.home.HomeViewModel
-import com.pajaga.ui.testing.TestingViewModel
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.Constant.TOPIC
 import com.pajaga.utils.other.showLogAssert
-import com.pajaga.utils.system.moveIntentTo
 
 
-class NotifService: Service() {
+class NotifService : Service() {
 
     private var mediaSession: MediaSessionCompat? = null
 
@@ -97,7 +92,7 @@ class NotifService: Service() {
     }
 
     companion object {
-//        var intent: Intent? = null
+        //        var intent: Intent? = null
 //        var activity: ComponentActivity? = null
         var viewModel: ViewModel? = null
         var viewLifecycleOwner: LifecycleOwner? = null
