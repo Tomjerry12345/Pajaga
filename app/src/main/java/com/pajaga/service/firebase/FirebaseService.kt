@@ -26,7 +26,7 @@ private const val CHANNEL_ID = "my_channel"
 class FirebaseService : FirebaseMessagingService() {
 
     companion object {
-        var sharedPref: SharedPreferences? = null
+//        var sharedPref: SharedPreferences? = null
 
         var token: String?
             get() {
