@@ -15,6 +15,7 @@ import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
 import com.pajaga.ui.TestingActivity
 import com.pajaga.ui.main.home.HomeViewModel
+import com.pajaga.ui.testing.TOPIC
 import com.pajaga.ui.testing.TestingViewModel
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
@@ -57,7 +58,8 @@ class PlayerService: Service() {
                         showLogAssert("toke", FirebaseService.token.toString())
                         PushNotification(
                             NotificationData("test", "test message"),
-                            FirebaseService.token!!
+                            TOPIC
+//                            FirebaseService.token!!
                         ).also {
                             val testingViewModel = viewModel as HomeViewModel
                             viewLifecycleOwner?.let { it1 ->
