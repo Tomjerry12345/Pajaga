@@ -88,4 +88,7 @@ dependencies {
     
     // dialog progress
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    //rounded imageview
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }

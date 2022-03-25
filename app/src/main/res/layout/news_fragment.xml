@@ -1,13 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.news.NewsFragment">
 
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/img_icon"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_marginStart="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:src="@drawable/icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TitleInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="News"
+            android:textSize="@dimen/_23dp"
+            app:layout_constraintBottom_toBottomOf="@id/img_icon"
+            app:layout_constraintStart_toEndOf="@id/img_icon"
+            app:layout_constraintTop_toTopOf="@id/img_icon" />
+
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="@dimen/_20dp"
+            android:layout_height="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:src="@drawable/user"
+            app:layout_constraintBottom_toBottomOf="@id/img_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_icon" />
+
+        <ImageView
+            android:layout_width="@dimen/_18dp"
+            android:layout_height="@dimen/_18dp"
+            android:layout_marginEnd="@dimen/_18dp"
+            android:src="@drawable/notification"
+            app:layout_constraintBottom_toBottomOf="@id/img_icon"
+            app:layout_constraintEnd_toStartOf="@id/profile"
+            app:layout_constraintTop_toTopOf="@id/img_icon" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_news"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/img_icon"
+            android:layout_marginTop="@dimen/_16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_news"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
