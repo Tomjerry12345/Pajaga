@@ -1,13 +1,25 @@
 package com.pajaga.ui.main.home
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.pajaga.R
+import com.pajaga.database.retrofit.RetrofitInstance
 import com.pajaga.model.Contact
+import com.pajaga.model.PushNotification
 import com.pajaga.model.Zone
+import com.pajaga.ui.main.home.adapter.ContactAdapter
+import com.pajaga.ui.main.home.adapter.ZoneAdapter
+import com.pajaga.utils.network.Response
+import com.pajaga.utils.other.showLogAssert
+import kotlinx.coroutines.*
+import retrofit2.HttpException
+import java.io.IOException
 
 class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView) : ViewModel() {
 
@@ -58,6 +70,67 @@ class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView) : Vi
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    fun getResponse(pushNotification: PushNotification): MutableLiveData<Response> {
+        val data = MutableLiveData<Response>()
+        GlobalScope.launch(Dispatchers.IO) {
+//            withContext(Dispatchers.IO) {
+                try {
+                    showLogAssert("test response", "true")
+                    val response = RetrofitInstance.apiNotif.postNotification(pushNotification)
+                    showLogAssert("after response", "true")
+                    if (response.isSuccessful) {
+                        showLogAssert("response", "Response: ${Gson().toJson(response)}")
+                    } else {
+                        showLogAssert("error", response.errorBody().toString())
+                    }
+                } catch (throwable: Throwable) {
+                    when (throwable) {
+                        is IOException -> {
+                            data.postValue(Response.Error("Network Error => ${throwable.message}"))
+                        }
+                        is HttpException -> {
+                            val code = throwable.code()
+                            val errorResponse = throwable.message()
+                            data.postValue(Response.Error("Error $code $errorResponse"))
+                        }
+                        else -> {
+                            data.postValue(Response.Error("Unknown Error => ${throwable.message}"))
+                        }
+                    }
+                }
+//            }
+        }
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                try {
+//                    showLogAssert("test response", "true")
+//                    val response = RetrofitInstance.apiNotif.postNotification(pushNotification)
+//                    showLogAssert("after response", "true")
+//                    if (response.isSuccessful) {
+//                        showLogAssert("response", "Response: ${Gson().toJson(response)}")
+//                    } else {
+//                        showLogAssert("error", response.errorBody().toString())
+//                    }
+//                } catch (throwable: Throwable) {
+//                    when (throwable) {
+//                        is IOException -> {
+//                            data.postValue(Response.Error("Network Error => ${throwable.message}"))
+//                        }
+//                        is HttpException -> {
+//                            val code = throwable.code()
+//                            val errorResponse = throwable.message()
+//                            data.postValue(Response.Error("Error $code $errorResponse"))
+//                        }
+//                        else -> {
+//                            data.postValue(Response.Error("Unknown Error => ${throwable.message}"))
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
+        return data
+    }
 
 }

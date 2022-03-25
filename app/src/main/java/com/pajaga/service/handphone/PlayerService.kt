@@ -14,6 +14,7 @@ import com.pajaga.model.NotificationData
 import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
 import com.pajaga.ui.TestingActivity
+import com.pajaga.ui.main.home.HomeViewModel
 import com.pajaga.ui.testing.TestingViewModel
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
@@ -53,11 +54,12 @@ class PlayerService: Service() {
                     showLogAssert("direction", "$i")
                     if (i == 2) {
                         SavedData.setInt(Constant.SUM_PLUS, 0)
+                        showLogAssert("toke", FirebaseService.token.toString())
                         PushNotification(
                             NotificationData("test", "test message"),
                             FirebaseService.token!!
                         ).also {
-                            val testingViewModel = viewModel as TestingViewModel
+                            val testingViewModel = viewModel as HomeViewModel
                             viewLifecycleOwner?.let { it1 ->
                                 testingViewModel.getResponse(it).observe(it1) {
                                     showLogAssert("response", "$it")
@@ -93,8 +95,8 @@ class PlayerService: Service() {
     }
 
     companion object {
-        var intent: Intent? = null
-        var activity: ComponentActivity? = null
+//        var intent: Intent? = null
+//        var activity: ComponentActivity? = null
         var viewModel: ViewModel? = null
         var viewLifecycleOwner: LifecycleOwner? = null
     }

@@ -1,9 +1,8 @@
-package com.pajaga.ui.main.home
+package com.pajaga.ui.main.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.pajaga.databinding.ItemContactBinding
 import com.pajaga.databinding.ItemZoneBinding
 import com.pajaga.model.Zone
 

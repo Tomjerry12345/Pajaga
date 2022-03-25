@@ -22,8 +22,8 @@ class TestingActivity : AppCompatActivity() {
 
         SavedData.init(this)
 
-        PlayerService.intent = intent
-        PlayerService.activity = this
+//        PlayerService.intent = intent
+//        PlayerService.activity = this
 
         startService(Intent(this, PlayerService::class.java))
 
