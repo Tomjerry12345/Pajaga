@@ -1,5 +1,6 @@
 package com.pajaga.ui.main.news
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.pajaga.database.retrofit.RetrofitInstance
+import com.pajaga.model.NewNewsModel
 import com.pajaga.model.News
 import com.pajaga.model.NewsModel
 import com.pajaga.model.PushNotification
@@ -41,12 +43,12 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
         listNews.add(News("", "", "30 January 2020", "", ""))
         listNews.add(News("", "", "30 January 2020", "", ""))
         listNews.add(News("", "", "30 January 2020", "", ""))
-        setRecNews()
+//        setRecNews()
 
     }
 
-    fun setRecNews() {
-        val adapterr = NewsAdapter(listNews)
+    fun setRecNews(list : ArrayList<News>) {
+        val adapterr = NewsAdapter(list)
         rvNews.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = adapterr
@@ -59,11 +61,16 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val response = RetrofitInstance.apiNews.getNews()
-//                    showLogAssert("response", response.body().toString())
-                    val results = response.body() as NewsModel
+                    val response = RetrofitInstance.apiNewsAPI.getNews()
+                    showLogAssert("response", response.body().toString())
+//                    val results = response.body() as NewNewsModel
 
-                    data.postValue(Response.Changed(results))
+//                    data.postValue(Response.Changed(results))
+
+//                    results.results?.let { listNews.addAll(it) }
+                    Log.d("news", "getResponse: $listNews")
+                    Log.d("news", "getResponse: $data")
+
 
                 } catch (throwable: Throwable) {
                     when (throwable) {

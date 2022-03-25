@@ -32,5 +32,6 @@ object Constant {
 
     // news
     const val BASE_URL_NEWS = "https://newsdata.io"
+    const val BASE_URL_NEWS_API = "https://newsapi.org"
     const val API_KEY_NEWS = "pub_576787425b621b5b303a8af432758da02525"
 }

@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/orang"
+            showImage="@{itemComic.img}"
             android:paddingTop="@dimen/_10dp"
             android:paddingBottom="@dimen/_10dp"/>
 
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_contact"
-            android:text="Paris Hilton"/>
+            android:text="@{itemComic.name}"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             style="@style/titleNameDesc"
-            android:text="Cousin"/>
+            android:text="@{itemComic.relation}"/>
 
 
 

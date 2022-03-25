@@ -30,13 +30,14 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = NewsFragmentBinding.bind(view)
-        viewModel.setDataNews()
+//        viewModel.setDataNews()
         viewModel.getResponse().observe(viewLifecycleOwner) {
             when(it)  {
                 is Response.Changed -> {
                     val data = it.data as NewsModel
                     val listData = data.results
                     showLogAssert("data", "${listData?.size}")
+                    listData?.let { it1 -> viewModel.setRecNews(it1) }
                 }
                 is Response.Error -> showLogAssert("error", it.error)
                 is Response.Success -> TODO()
