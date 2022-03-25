@@ -70,7 +70,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.handphone.PlayerService" />
+        <service android:name=".service.handphone.NotifService" />
 
         <!-- Last Configuration -->
         <!-- Activity -->

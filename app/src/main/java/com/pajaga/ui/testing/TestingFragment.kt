@@ -16,12 +16,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.pajaga.BuildConfig
 import com.pajaga.R
 import com.pajaga.service.firebase.FirebaseService
-import com.pajaga.service.handphone.PlayerService
+import com.pajaga.service.handphone.NotifService
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.showLogAssert
-
-const val TOPIC = "/topics/testing"
 
 class TestingFragment : Fragment(R.layout.testing_fragment) {
 
@@ -65,10 +63,10 @@ class TestingFragment : Fragment(R.layout.testing_fragment) {
             SavedData.setBoolean(Constant.ONACTIVED_KEY_VOLUME, true)
         }
 
-        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+//        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
-        PlayerService.viewModel = viewModel
-        PlayerService.viewLifecycleOwner = viewLifecycleOwner
+        NotifService.viewModel = viewModel
+        NotifService.viewLifecycleOwner = viewLifecycleOwner
     }
 
     private fun getPermission() {

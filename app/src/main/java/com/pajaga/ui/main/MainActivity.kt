@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.pajaga.R
-import com.pajaga.service.handphone.PlayerService
+import com.pajaga.service.handphone.NotifService
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.showLogAssert
@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         showLogAssert("checked", "$checked")
 
         if (checked) {
-            startService(Intent(this, PlayerService::class.java))
+            startService(Intent(this, NotifService::class.java))
         } else {
-            stopService(Intent(this, PlayerService::class.java))
+            stopService(Intent(this, NotifService::class.java))
         }
 
         val navHostFragment =

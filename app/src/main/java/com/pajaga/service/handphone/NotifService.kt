@@ -15,15 +15,15 @@ import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
 import com.pajaga.ui.TestingActivity
 import com.pajaga.ui.main.home.HomeViewModel
-import com.pajaga.ui.testing.TOPIC
 import com.pajaga.ui.testing.TestingViewModel
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
+import com.pajaga.utils.other.Constant.TOPIC
 import com.pajaga.utils.other.showLogAssert
 import com.pajaga.utils.system.moveIntentTo
 
 
-class PlayerService: Service() {
+class NotifService: Service() {
 
     private var mediaSession: MediaSessionCompat? = null
 
@@ -55,9 +55,9 @@ class PlayerService: Service() {
                     showLogAssert("direction", "$i")
                     if (i == 2) {
                         SavedData.setInt(Constant.SUM_PLUS, 0)
-                        showLogAssert("toke", FirebaseService.token.toString())
+                        showLogAssert("token", FirebaseService.token.toString())
                         PushNotification(
-                            NotificationData("test", "test message"),
+                            NotificationData("HELP!!!", "Your friend in a danger situation"),
                             TOPIC
 //                            FirebaseService.token!!
                         ).also {
