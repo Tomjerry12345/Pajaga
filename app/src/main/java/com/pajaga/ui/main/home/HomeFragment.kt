@@ -27,17 +27,18 @@ import com.pajaga.utils.system.moveIntentTo
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
 
-    companion object{
-        fun newInstance(): HomeFragment{
+    companion object {
+        fun newInstance(): HomeFragment {
             return HomeFragment()
         }
+
     }
 
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModel.Factory(binding.rvContact,binding.rvZone)
+        HomeViewModel.Factory(binding.rvContact, binding.rvZone)
     }
 
-    private lateinit var binding : HomeFragmentBinding
+    private lateinit var binding: HomeFragmentBinding
 
     // The entry point to the Places API.
     private lateinit var placesClient: PlacesClient
@@ -66,7 +67,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
         placesClient = Places.createClient(requireActivity())
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             FirebaseService.token = it
@@ -121,8 +123,14 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                             showLogAssert("latitude", "${lastKnownLocation.latitude}")
                             showLogAssert("longitude", "${lastKnownLocation.longitude}")
 
-                            SavedData.setFloat(Constant.KEY_LATITUDE, lastKnownLocation.latitude.toFloat())
-                            SavedData.setFloat(Constant.KEY_LONGITUDE, lastKnownLocation.longitude.toFloat())
+                            SavedData.setFloat(
+                                Constant.KEY_LATITUDE,
+                                lastKnownLocation.latitude.toFloat()
+                            )
+                            SavedData.setFloat(
+                                Constant.KEY_LONGITUDE,
+                                lastKnownLocation.longitude.toFloat()
+                            )
                         }
                     } else {
                         showLogAssert("test", "Current location is null. Using defaults.")
@@ -151,6 +159,9 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     override fun onPause() {
         super.onPause()
         showLogAssert("onPause", "true")
+        FirebaseService.mediaPlayer.let {
+            it?.stop()
+        }
 //        moveIntentTo(requireActivity(), MainActivity())
     }
 

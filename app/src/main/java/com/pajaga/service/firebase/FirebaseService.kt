@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pajaga.R
@@ -35,6 +36,8 @@ class FirebaseService : FirebaseMessagingService() {
             set(value) {
                 value?.let { SavedData.setString(Constant.KEY_TOKEN, it) }
             }
+
+        var mediaPlayer: MediaPlayer? = null
     }
 
     override fun onNewToken(newToken: String) {
@@ -46,14 +49,17 @@ class FirebaseService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         val latitude = SavedData.getFloat(Constant.KEY_LATITUDE)
         val longitude = SavedData.getFloat(Constant.KEY_LONGITUDE)
-        val mediaPlayer = MediaPlayer.create(this, R.raw.notification)
-        mediaPlayer.start()
+        mediaPlayer = MediaPlayer.create(this, R.raw.notification)
+        mediaPlayer?.start()
+
 //        pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
 //
 //        val intent = Intent(this, MainActivity::class.java)
         // Create a Uri from an intent string. Use the result to create an Intent.
 //        val gmmIntentUri = Uri.parse("geo:37.7749,-122.4194")
-        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude")
+        val testLatitude = "-5.2057715"
+        val testLongitude = "119.4951314"
+        val gmmIntentUri = Uri.parse("google.navigation:q=$testLatitude,$testLongitude")
 
 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
         val intent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -70,13 +76,23 @@ class FirebaseService : FirebaseMessagingService() {
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_ONE_SHOT)
+
+//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_ONE_SHOT)
+
+        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            // Add the intent, which inflates the back stack
+//            mediaPlayer.stop()
+            addNextIntentWithParentStack(intent)
+            // Get the PendingIntent containing the entire back stack
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
             .setSmallIcon(R.drawable.ic_baseline_add_24)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(resultPendingIntent)
             .build()
 
         notificationManager.notify(notificationID, notification)
