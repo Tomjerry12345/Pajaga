@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.pajaga.database.retrofit.RetrofitInstance
-import com.pajaga.model.NewNewsModel
-import com.pajaga.model.News
-import com.pajaga.model.NewsModel
-import com.pajaga.model.PushNotification
+import com.pajaga.model.*
 import com.pajaga.utils.network.Response
 import com.pajaga.utils.other.showLogAssert
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -47,7 +44,7 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
 
     }
 
-    fun setRecNews(list : ArrayList<News>) {
+    fun setRecNews(list : ArrayList<Articles>) {
         val adapterr = NewsAdapter(list)
         rvNews.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -63,13 +60,13 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
                 try {
                     val response = RetrofitInstance.apiNewsAPI.getNews()
                     showLogAssert("response", response.body().toString())
-//                    val results = response.body() as NewNewsModel
+                    val results = response.body() as NewNewsModel
 
-//                    data.postValue(Response.Changed(results))
+                    data.postValue(Response.Changed(results))
 
 //                    results.results?.let { listNews.addAll(it) }
-                    Log.d("news", "getResponse: $listNews")
-                    Log.d("news", "getResponse: $data")
+//                    Log.d("news", "getResponse: $listNews")
+//                    Log.d("news", "getResponse: $data")
 
 
                 } catch (throwable: Throwable) {

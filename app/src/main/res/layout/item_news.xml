@@ -6,7 +6,7 @@
     <data>
         <variable
             name="itemNews"
-            type="com.pajaga.model.News" />
+            type="com.pajaga.model.Articles" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             android:layout_height="@dimen/_80dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            showImageUrl="@{itemNews.img_url}"
+            showImageUrl="@{itemNews.urlToImage}"
             android:scaleType="fitXY"
             app:riv_corner_radius="@dimen/_8dp"
             android:layout_marginStart="@dimen/_16dp"
@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="@id/favicon"
             app:layout_constraintStart_toEndOf="@id/favicon"
             android:layout_marginStart="@dimen/_7dp"
-            android:text="@{itemNews.source_id}"
+            android:text="@{itemNews.source.id}"
             android:fontFamily="@font/poppins_regular"
             android:textColor="#C4C4C4" />
 
@@ -70,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_news"
             android:layout_marginStart="@dimen/_16dp"
             android:fontFamily="@font/poppins_regular"
-            android:text="@{itemNews.pubDate}"
+            android:text="@{itemNews.publishedAt}"
             android:textColor="#C4C4C4" />
 
         <View
