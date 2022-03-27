@@ -1,18 +1,19 @@
 package com.pajaga.ui.main.news
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.pajaga.R
 import com.pajaga.database.retrofit.RetrofitInstance
-import com.pajaga.model.NewNewsModel
-import com.pajaga.model.News
-import com.pajaga.model.NewsModel
-import com.pajaga.model.PushNotification
+import com.pajaga.model.*
+import com.pajaga.ui.WebViewFragment
 import com.pajaga.utils.network.Response
 import com.pajaga.utils.other.showLogAssert
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -22,33 +23,23 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
-class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
+class NewsViewModel(val rvNews: RecyclerView,val navController: NavController) : ViewModel() {
 
-    class Factory(val rvNews: RecyclerView) : ViewModelProvider.Factory {
+    class Factory(val rvNews: RecyclerView,val navController: NavController) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NewsViewModel(rvNews) as T
+            return NewsViewModel(rvNews, navController) as T
         }
     }
 
     val listNews = ArrayList<News>()
 
 
-    fun setDataNews() {
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-        listNews.add(News("", "", "30 January 2020", "", ""))
-//        setRecNews()
 
-    }
 
-    fun setRecNews(list : ArrayList<News>) {
-        val adapterr = NewsAdapter(list)
+    fun setRecNews(list : ArrayList<Articles>) {
+        val adapterr = NewsAdapter(list,{item : String -> onClickItem(item)})
         rvNews.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = adapterr
@@ -62,12 +53,10 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
             withContext(Dispatchers.IO) {
                 try {
                     val response = RetrofitInstance.apiNewsAPI.getNews()
-                    showLogAssert("response", response.body().toString())
-//                    val results = response.body() as NewNewsModel
+                    val results = response.body() as NewNewsModel
 
-//                    data.postValue(Response.Changed(results))
+                    data.postValue(Response.Changed(results))
 
-//                    results.results?.let { listNews.addAll(it) }
                     Log.d("news", "getResponse: $listNews")
                     Log.d("news", "getResponse: $data")
 
@@ -91,6 +80,19 @@ class NewsViewModel(val rvNews: RecyclerView) : ViewModel() {
         }
 
         return data
+    }
+
+
+    private fun onClickItem(url: String){
+
+        val bundle = Bundle()
+        val webViewFragment = WebViewFragment()
+        bundle.putString("url",url)
+        webViewFragment.arguments = bundle
+        navController.navigate(
+            R.id.webViewFragment,bundle
+        )
+
     }
 
 

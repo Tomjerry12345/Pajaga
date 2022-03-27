@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pajaga.databinding.ItemNewsBinding
+import com.pajaga.model.Articles
 import com.pajaga.model.News
 
-class NewsAdapter(val list : ArrayList<News>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(val list : ArrayList<Articles>,
+                  val onClick : (String) -> Unit) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     inner class ViewHolder(private var binding : ItemNewsBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(newsData : News){
+        fun bind(newsData : Articles){
             binding.itemNews = newsData
             binding.executePendingBindings()
         }
@@ -24,7 +26,11 @@ class NewsAdapter(val list : ArrayList<News>) : RecyclerView.Adapter<NewsAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list.get(position)
-        holder.bind(item)    }
+        holder.bind(item)
+        holder.itemView.setOnClickListener {
+            item.url?.let { it1 -> onClick(it1) }
+        }
+    }
 
     override fun getItemCount(): Int  = list.size
 
