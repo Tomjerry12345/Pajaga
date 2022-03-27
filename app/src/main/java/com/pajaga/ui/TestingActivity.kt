@@ -3,16 +3,11 @@ package com.pajaga.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.pajaga.R
-import com.pajaga.service.handphone.PlayerService
+import com.pajaga.service.handphone.NotifService
 import com.pajaga.utils.local.SavedData
-import com.pajaga.utils.other.Constant
-import com.pajaga.utils.other.showLogAssert
-import com.pajaga.utils.system.moveIntentTo
-import com.pajaga.utils.system.moveNavigationTo
 
 class TestingActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -25,7 +20,7 @@ class TestingActivity : AppCompatActivity() {
 //        PlayerService.intent = intent
 //        PlayerService.activity = this
 
-        startService(Intent(this, PlayerService::class.java))
+        startService(Intent(this, NotifService::class.java))
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

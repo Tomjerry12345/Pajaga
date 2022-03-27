@@ -1,4 +1,4 @@
-package com.pajaga.ui
+package com.pajaga.ui.main.profil
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
