@@ -19,8 +19,9 @@ object Constant {
     const val KEY_LATITUDE = "latitude"
     const val KEY_LONGITUDE = "longitude"
 
-    // Topics
+    // Notif
     const val TOPIC = "/topics/testing"
+    const val CHANNEL_ID = "my_channel"
 
     // retrofit base url
     const val BASE_URL = "http://192.168.1.16:4000/"

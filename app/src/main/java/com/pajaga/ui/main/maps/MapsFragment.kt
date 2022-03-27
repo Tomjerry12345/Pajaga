@@ -8,19 +8,18 @@ import android.graphics.Color
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,21 +28,27 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.LocationBias
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.gson.Gson
 import com.pajaga.BuildConfig
 import com.pajaga.R
 import com.pajaga.databinding.MapsFragmentBinding
 import com.pajaga.model.GoogleMapsModel
 import com.pajaga.ui.main.home.HomeFragment
-import com.pajaga.ui.main.home.HomeViewModel
 import com.pajaga.utils.other.showLogAssert
 import com.pajaga.utils.other.showToast
 import com.pajaga.utils.system.moveNavigationTo
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
+import java.security.Policy
+
 
 class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 
@@ -78,6 +83,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 
     private lateinit var binding: MapsFragmentBinding
 
+    private lateinit var autocompleteFragment: AutocompleteSupportFragment
+
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
@@ -92,6 +99,8 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 
             // Get the current location of the device and set the position of the map.
             getDeviceLocation()
+
+            findPlacesQuery()
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,6 +109,13 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         setHasOptionsMenu(true)
 
         binding = MapsFragmentBinding.bind(view)
+
+//        autocompleteFragment =
+//            requireActivity().supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)!!
+
+        autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                    as AutocompleteSupportFragment
 
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
@@ -112,24 +128,24 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        binding.inputDestination.editText?.setOnEditorActionListener { textView, i, keyEvent ->
-            if (i == EditorInfo.IME_ACTION_SEARCH) {
-                showLogAssert("Ime", "search")
-                if (lastKnownLocation != null) {
-                    val location1 =
-                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-                    val location2 = "UIN Alauddin Makassar"
-//                            val location2 = "Metrotech Digital Asia, Jalan Toddopuli 10, Borong, Makassar City, South Sulawesi"
-                    val url = getDirectionURL1(location1, location2)
-                    GetDirection(url).execute()
-                } else {
-                    showLogAssert("error", "null lastKnownLocation")
-                }
-
-                return@setOnEditorActionListener true;
-            }
-            return@setOnEditorActionListener false
-        }
+//        binding.inputDestination.editText?.setOnEditorActionListener { textView, i, keyEvent ->
+//            if (i == EditorInfo.IME_ACTION_SEARCH) {
+//                showLogAssert("Ime", "search")
+//                if (lastKnownLocation != null) {
+//                    val location1 =
+//                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+//                    val location2 = "Metrotech"
+////                            val location2 = "Metrotech Digital Asia, Jalan Toddopuli 10, Borong, Makassar City, South Sulawesi"
+//                    val url = getDirectionURL1(location1, location2)
+//                    GetDirection(url).execute()
+//                } else {
+//                    showLogAssert("error", "null lastKnownLocation")
+//                }
+//
+//                return@setOnEditorActionListener true;
+//            }
+//            return@setOnEditorActionListener false
+//        }
     }
 
     /**
@@ -158,9 +174,6 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
     // [END maps_current_place_on_options_item_selected]
 
     override fun onMapReady(googleMap: GoogleMap) {
-
-        showLogAssert("onMapReady", "true")
-
         // Add polylines to the map.
         // Polylines are useful to show a route or some other connection between points.
 //        val polyline1 = googleMap.addPolyline(
@@ -228,22 +241,22 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
 //        updateLocationUI()
     }
 
-    fun getLineRoads() {
-        val location1 = LatLng(-5.200114, 119.487961)
-        map?.addMarker(MarkerOptions().position(location1).title("My Location"))
-//        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(location1, 5f))
-
-//        Log.d("GoogleMap", "before location2")
-//        val location2 = LatLng(9.89,78.11)
-//        map?.addMarker(MarkerOptions().position(location2).title("Madurai"))
-
-        val location2 = LatLng(-5.196907, 119.483339)
-        map?.addMarker(MarkerOptions().position(location2).title("Bangalore"))
-
-        val url = getDirectionURL(location1, location2)
-
-        GetDirection1(url).execute()
-    }
+//    fun getLineRoads() {
+//        val location1 = LatLng(-5.200114, 119.487961)
+//        map?.addMarker(MarkerOptions().position(location1).title("My Location"))
+////        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(location1, 5f))
+//
+////        Log.d("GoogleMap", "before location2")
+////        val location2 = LatLng(9.89,78.11)
+////        map?.addMarker(MarkerOptions().position(location2).title("Madurai"))
+//
+//        val location2 = LatLng(-5.196907, 119.483339)
+//        map?.addMarker(MarkerOptions().position(location2).title("Bangalore"))
+//
+//        val url = getDirectionURL(location1, location2)
+//
+//        GetDirection1(url).execute()
+//    }
 
     // [START maps_current_place_get_device_location]
     @SuppressLint("MissingPermission")
@@ -290,11 +303,11 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
     }
     // [END maps_current_place_get_device_location]
 
-    private fun getDirectionURL(origin: LatLng, dest: LatLng): String {
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=driving&key=${BuildConfig.MAPS_API_KEY}"
-    }
+//    private fun getDirectionURL(origin: LatLng, dest: LatLng): String {
+//        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=driving&key=${BuildConfig.MAPS_API_KEY}"
+//    }
 
-    private fun getDirectionURL1(origin: LatLng, dest: String): String {
+    private fun getDirectionURL(origin: LatLng, dest: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=$dest&sensor=false&mode=driving&key=${BuildConfig.MAPS_API_KEY}"
     }
 
@@ -307,6 +320,7 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
             val response = client.newCall(request).execute()
             val data = response.body()!!.string()
             val result = ArrayList<List<LatLng>>()
+            showLogAssert("result", "${result.size}")
             try {
                 val respObj = Gson().fromJson(data, GoogleMapsModel::class.java)
 
@@ -328,65 +342,77 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
         }
 
         override fun onPostExecute(result: List<List<LatLng>>) {
+//            var line: Polyline? = null
             val lineoption = PolylineOptions()
+
+            map?.clear()
+
+//            if (line?.points?.isEmpty() == false) {
+////                line = map?.addPolyline(lineoption)
+//                line.remove()
+//                showLogAssert("line", "not empty")
+//            }
+
             for (i in result.indices) {
                 lineoption.addAll(result[i])
                 lineoption.width(10f)
                 lineoption.color(Color.BLUE)
                 lineoption.geodesic(true)
             }
+
             map?.addPolyline(lineoption)
+
             showLogAssert("onPostExecute", "true")
-            showLogAssert("origin", "${lineoption.points}")
-            originPoints = lineoption.points
-            getLineRoads()
+//            showLogAssert("origin", "${lineoption.points}")
+//            originPoints = lineoption.points
+//            getLineRoads()
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetDirection1(val url: String) :
-        AsyncTask<Void, Void, List<List<LatLng>>>() {
-        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
-            val client = OkHttpClient()
-            val request = Request.Builder().url(url).build()
-            val response = client.newCall(request).execute()
-            val data = response.body()!!.string()
-            val result = ArrayList<List<LatLng>>()
-            try {
-                val respObj = Gson().fromJson(data, GoogleMapsModel::class.java)
-
-                val path = ArrayList<LatLng>()
-
-                for (i in 0 until respObj.routes[0].legs[0].steps.size) {
-//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
-//                    path.add(startLatLng)
-//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
-                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
-                }
-                result.add(path)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return result
-        }
-
-        override fun onPostExecute(result: List<List<LatLng>>) {
-            val lineoption = PolylineOptions()
-            for (i in result.indices) {
-                lineoption.addAll(result[i])
-                lineoption.width(10f)
-                lineoption.color(Color.RED)
-                lineoption.geodesic(true)
-            }
-            map?.addPolyline(lineoption)
-            showLogAssert("onPostExecute", "true")
-            showLogAssert("roads danger", "${lineoption.points}")
-            dangerPointsPlace1 = lineoption.points
-            checkRoadsInDanger()
-        }
-    }
+//    @SuppressLint("StaticFieldLeak")
+//    private inner class GetDirection1(val url: String) :
+//        AsyncTask<Void, Void, List<List<LatLng>>>() {
+//        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+//            val client = OkHttpClient()
+//            val request = Request.Builder().url(url).build()
+//            val response = client.newCall(request).execute()
+//            val data = response.body()!!.string()
+//            val result = ArrayList<List<LatLng>>()
+//            try {
+//                val respObj = Gson().fromJson(data, GoogleMapsModel::class.java)
+//
+//                val path = ArrayList<LatLng>()
+//
+//                for (i in 0 until respObj.routes[0].legs[0].steps.size) {
+////                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
+////                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
+////                    path.add(startLatLng)
+////                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
+////                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
+//                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
+//                }
+//                result.add(path)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//            return result
+//        }
+//
+//        override fun onPostExecute(result: List<List<LatLng>>) {
+//            val lineoption = PolylineOptions()
+//            for (i in result.indices) {
+//                lineoption.addAll(result[i])
+//                lineoption.width(10f)
+//                lineoption.color(Color.RED)
+//                lineoption.geodesic(true)
+//            }
+//            map?.addPolyline(lineoption)
+//            showLogAssert("onPostExecute", "true")
+//            showLogAssert("roads danger", "${lineoption.points}")
+//            dangerPointsPlace1 = lineoption.points
+//            checkRoadsInDanger()
+//        }
+//    }
 
     fun decodePolyline(encoded: String): List<LatLng> {
 
@@ -576,7 +602,10 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
                 if (point.latitude == placeDanger1.latitude && point.longitude == placeDanger1.longitude) {
                     showLogAssert("info", "Jalur berbahaya")
                     showLogAssert("poin", "${point.latitude} - ${point.longitude}")
-                    showLogAssert("placeDanger1", "${placeDanger1.latitude} - ${placeDanger1.longitude}")
+                    showLogAssert(
+                        "placeDanger1",
+                        "${placeDanger1.latitude} - ${placeDanger1.longitude}"
+                    )
 //                    showLogAssert("point latitude", "Jalur berbahaya")
                     showToast(requireContext(), "Jalur berbahaya")
                     return
@@ -596,6 +625,39 @@ class MapsFragment : Fragment(R.layout.maps_fragment), OnMapReadyCallback {
                     moveNavigationTo(requireView(), R.id.action_mapsFragment_to_baseFragment)
                 }
             })
+    }
+
+    private fun findPlacesQuery() {
+        val northEast = LatLng(-5.0467427, 119.4838753)
+        val southWest = LatLng(-5.2372057, 119.4271383)
+
+        val batas = RectangularBounds.newInstance(southWest, northEast)
+        // Specify the types of place data to return.
+        autocompleteFragment.setLocationBias(batas)
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onError(status: Status) {
+                showLogAssert("status", "$status")
+            }
+
+            override fun onPlaceSelected(place: Place) {
+                showLogAssert("place", "Place: ${place.name}, ${place.id}")
+                if (lastKnownLocation != null) {
+                    val location1 =
+                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    val location2 = place.name
+//                            val location2 = "Metrotech Digital Asia, Jalan Toddopuli 10, Borong, Makassar City, South Sulawesi"
+                    val url = getDirectionURL(location1, location2)
+                    GetDirection(url).execute()
+                } else {
+                    showLogAssert("error", "null lastKnownLocation")
+                    showToast(requireContext(), "Aktifkan lokasi terlebih dahulu")
+                }
+            }
+
+        })
     }
 
     companion object {

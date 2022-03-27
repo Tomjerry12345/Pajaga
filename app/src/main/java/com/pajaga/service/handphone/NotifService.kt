@@ -8,12 +8,14 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.media.VolumeProviderCompat
+import com.pajaga.model.Notification
 import com.pajaga.model.NotificationData
 import com.pajaga.model.PushNotification
 import com.pajaga.service.firebase.FirebaseService
 import com.pajaga.ui.main.home.HomeViewModel
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
+import com.pajaga.utils.other.Constant.CHANNEL_ID
 import com.pajaga.utils.other.Constant.TOPIC
 import com.pajaga.utils.other.showLogAssert
 
@@ -53,7 +55,8 @@ class NotifService : Service() {
                         showLogAssert("token", FirebaseService.token.toString())
                         PushNotification(
                             NotificationData("HELP!!!", "Your friend in a danger situation"),
-                            TOPIC
+                            TOPIC,
+                            Notification("HELP!!!", "Your friend in a danger situation", CHANNEL_ID)
 //                            FirebaseService.token!!
                         ).also {
                             val testingViewModel = viewModel as HomeViewModel

@@ -3,11 +3,11 @@ package com.pajaga.service.firebase
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_ONE_SHOT
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -17,12 +17,11 @@ import androidx.core.app.TaskStackBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pajaga.R
+import com.pajaga.ui.main.profil.ProfilActivity
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
-import com.pajaga.utils.other.showLogAssert
+import com.pajaga.utils.other.Constant.CHANNEL_ID
 import kotlin.random.Random
-
-private const val CHANNEL_ID = "my_channel"
 
 class FirebaseService : FirebaseMessagingService() {
 
@@ -52,27 +51,28 @@ class FirebaseService : FirebaseMessagingService() {
         mediaPlayer = MediaPlayer.create(this, R.raw.notification)
         mediaPlayer?.start()
 
-//        pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
+        val pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
 //
-//        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, ProfilActivity::class.java)
         // Create a Uri from an intent string. Use the result to create an Intent.
 //        val gmmIntentUri = Uri.parse("geo:37.7749,-122.4194")
-        val testLatitude = "-5.2057715"
-        val testLongitude = "119.4951314"
-        val gmmIntentUri = Uri.parse("google.navigation:q=$testLatitude,$testLongitude")
-
-// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-        val intent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//        val testLatitude = "-5.2057715"
+//        val testLongitude = "119.4951314"
+//        val gmmIntentUri = Uri.parse("google.navigation:q=$testLatitude,$testLongitude")
+//
+//// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+//        val intent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
 // Make the Intent explicit by setting the Google Maps package
-        intent.setPackage("com.google.android.apps.maps")
+//        intent.setPackage("com.google.android.apps.maps")
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
+//        val notificationID = getString(R.string.default_notification_channel_id)
 
-        showLogAssert("message", "${message.data}")
+//        showLogAssert("message", "${message.data}")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(notificationManager)
+            createNotificationChannel(notificationManager, pathNotif)
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -87,19 +87,41 @@ class FirebaseService : FirebaseMessagingService() {
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(message.data["title"])
-            .setContentText(message.data["message"])
-            .setSmallIcon(R.drawable.ic_baseline_add_24)
-            .setAutoCancel(true)
-            .setContentIntent(resultPendingIntent)
-            .build()
+        if (!message.data.isNullOrEmpty()) {
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(message.data["title"])
+                .setContentText(message.data["message"])
+                .setSmallIcon(R.drawable.ic_baseline_add_24)
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent)
+                .build()
+            notificationManager.notify(notificationID, notification)
+        }
+//        else {
+//            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setContentTitle(message.notification?.title)
+//                .setContentText(message.notification?.body)
+//                .setSmallIcon(R.drawable.ic_baseline_add_24)
+//                .setAutoCancel(true)
+//                .setContentIntent(resultPendingIntent)
+//                .build()
+//            notificationManager.notify(0, notification)
+//        }
 
-        notificationManager.notify(notificationID, notification)
+
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(notificationManager: NotificationManager) {
+    private fun createNotificationChannel(
+        notificationManager: NotificationManager,
+        pathNotif: String
+    ) {
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .build()
         val channelName = "channelName"
         val channel = NotificationChannel(
             CHANNEL_ID,
@@ -109,6 +131,7 @@ class FirebaseService : FirebaseMessagingService() {
             description = "My channel description"
             enableLights(true)
             enableVibration(true)
+            setSound(Uri.parse(pathNotif),audioAttributes)
             lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)

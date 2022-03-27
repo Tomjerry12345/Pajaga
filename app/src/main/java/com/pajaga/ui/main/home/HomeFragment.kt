@@ -151,11 +151,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
     // [END maps_current_place_get_device_location]
 
-    override fun onResume() {
-        super.onResume()
-        showLogAssert("onResume", "true")
-    }
-
     override fun onPause() {
         super.onPause()
         showLogAssert("onPause", "true")

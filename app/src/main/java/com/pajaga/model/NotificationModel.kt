@@ -5,7 +5,15 @@ data class NotificationData(
     val message: String
 )
 
+data class Notification(
+    val title: String,
+    val body: String,
+    val android_channel_id: String
+//    val sound : String
+)
+
 data class PushNotification(
     val data: NotificationData,
-    val to: String
+    val to: String,
+    val notification: Notification
 )
