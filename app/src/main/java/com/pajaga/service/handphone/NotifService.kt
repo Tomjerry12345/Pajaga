@@ -56,7 +56,7 @@ class NotifService : Service() {
                         PushNotification(
                             NotificationData("HELP!!!", "Your friend in a danger situation"),
                             TOPIC,
-                            Notification("HELP!!!", "Your friend in a danger situation", CHANNEL_ID)
+                            Notification("HELP 1!!!", "Your friend in a danger situation 1")
 //                            FirebaseService.token!!
                         ).also {
                             val testingViewModel = viewModel as HomeViewModel

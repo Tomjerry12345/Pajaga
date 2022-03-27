@@ -1,5 +1,6 @@
 package com.pajaga.service.firebase
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +10,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -21,6 +24,8 @@ import com.pajaga.ui.main.profil.ProfilActivity
 import com.pajaga.utils.local.SavedData
 import com.pajaga.utils.other.Constant
 import com.pajaga.utils.other.Constant.CHANNEL_ID
+import com.pajaga.utils.other.showLogAssert
+import java.lang.Exception
 import kotlin.random.Random
 
 class FirebaseService : FirebaseMessagingService() {
@@ -48,8 +53,10 @@ class FirebaseService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         val latitude = SavedData.getFloat(Constant.KEY_LATITUDE)
         val longitude = SavedData.getFloat(Constant.KEY_LONGITUDE)
-        mediaPlayer = MediaPlayer.create(this, R.raw.notification)
-        mediaPlayer?.start()
+//        mediaPlayer = MediaPlayer.create(this, R.raw.notification)
+//        mediaPlayer?.start()
+
+//        playNotificationSound()
 
         val pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
 //
@@ -87,6 +94,8 @@ class FirebaseService : FirebaseMessagingService() {
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
+        showLogAssert("id channel", message.notification?.channelId.toString())
+
         if (!message.data.isNullOrEmpty()) {
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(message.data["title"])
@@ -97,16 +106,18 @@ class FirebaseService : FirebaseMessagingService() {
                 .build()
             notificationManager.notify(notificationID, notification)
         }
-//        else {
-//            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setContentTitle(message.notification?.title)
-//                .setContentText(message.notification?.body)
-//                .setSmallIcon(R.drawable.ic_baseline_add_24)
-//                .setAutoCancel(true)
-//                .setContentIntent(resultPendingIntent)
-//                .build()
-//            notificationManager.notify(0, notification)
-//        }
+        else {
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(message.notification?.title)
+                .setContentText(message.notification?.body)
+                .setSmallIcon(R.drawable.ic_baseline_add_24)
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_LIGHTS )
+//                .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+ "://" + packageName +"/"+R.raw.notification))
+                .setContentIntent(resultPendingIntent)
+                .build()
+            notificationManager.notify(0, notification)
+        }
 
 
 
@@ -131,11 +142,24 @@ class FirebaseService : FirebaseMessagingService() {
             description = "My channel description"
             enableLights(true)
             enableVibration(true)
-            setSound(Uri.parse(pathNotif),audioAttributes)
+            setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+ "://" + packageName +"/"+R.raw.notification2),audioAttributes)
             lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)
     }
 
+    fun playNotificationSound() {
+        try {
+            val alarmSound = Uri.parse(
+                ContentResolver.SCHEME_ANDROID_RESOURCE
+                        + "://" + packageName + "/raw/notification"
+            );
+            val r = RingtoneManager.getRingtone(this, alarmSound);
+            r.play();
+        } catch (e: Exception) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
