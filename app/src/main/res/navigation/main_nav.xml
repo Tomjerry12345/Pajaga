@@ -34,7 +34,6 @@
             app:destination="@id/baseFragment"
             app:popUpTo="@id/webViewFragment"
             app:popUpToInclusive="true"
-
             />
     </fragment>
 </navigation>

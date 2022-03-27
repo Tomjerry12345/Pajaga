@@ -82,9 +82,7 @@ class NewsViewModel(val rvNews: RecyclerView,val navController: NavController) :
         return data
     }
 
-
     private fun onClickItem(url: String){
-
         val bundle = Bundle()
         val webViewFragment = WebViewFragment()
         bundle.putString("url",url)
