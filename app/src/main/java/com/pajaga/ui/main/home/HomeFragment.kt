@@ -16,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.pajaga.BuildConfig
 import com.pajaga.R
 import com.pajaga.databinding.HomeFragmentBinding
+import com.pajaga.model.Permission
 import com.pajaga.service.firebase.FirebaseService
 import com.pajaga.service.handphone.NotifService
 import com.pajaga.ui.main.MainActivity
@@ -48,14 +49,18 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private var locationPermissionGranted = false
 
+    private var listPermission: ArrayList<Permission> = ArrayList()
+
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
 //            Log.e("DEBUG", )
                 showLogAssert("requestMultiplePermissions", "${it.key} = ${it.value}")
                 locationPermissionGranted = it.value
+                listPermission.add(Permission("1", it.key, it.value))
             }
             getDeviceLocation()
+            viewModel.setDataPermission(listPermission)
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +69,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding = HomeFragmentBinding.bind(view)
         viewModel.setData()
         viewModel.setDataZone()
-        viewModel.setDataPermission()
 
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
         placesClient = Places.createClient(requireActivity())
@@ -136,11 +140,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     } else {
                         showLogAssert("test", "Current location is null. Using defaults.")
                         showLogAssert("maps error", "Exception: ${task.exception}")
-//                        map?.moveCamera(
-//                            CameraUpdateFactory
-//                                .newLatLngZoom(defaultLocation, MapsFragment.DEFAULT_ZOOM.toFloat())
-//                        )
-//                        map?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
             } else {
@@ -151,14 +150,5 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
     }
     // [END maps_current_place_get_device_location]
-
-    override fun onPause() {
-        super.onPause()
-        showLogAssert("onPause", "true")
-        FirebaseService.mediaPlayer.let {
-            it?.stop()
-        }
-//        moveIntentTo(requireActivity(), MainActivity())
-    }
 
 }

@@ -3,7 +3,6 @@ package com.pajaga.ui.main.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,11 +46,11 @@ class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView ,val 
 
     }
 
-    fun setDataPermission(){
-        listPermission.add(Permission("1","ACCESS_FINE_LOCATION",false))
-        listPermission.add(Permission("2","ACCESS_WIFI_STATE",false))
-        listPermission.add(Permission("3","ACCESS_COARSE_LOCATION",false))
-        setRecPermission()
+    fun setDataPermission(listPermission: ArrayList<Permission>) {
+//        this.listPermission.add(Permission("1","ACCESS_FINE_LOCATION",false))
+//        this.listPermission.add(Permission("2","ACCESS_WIFI_STATE",false))
+//        this.listPermission.add(Permission("3","ACCESS_COARSE_LOCATION",false))
+        setRecPermission(listPermission)
     }
 
     fun setDataZone(){
@@ -71,8 +70,7 @@ class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView ,val 
         }
 
     }
-     fun setRecPermission(){
-
+     private fun setRecPermission(listPermission: ArrayList<Permission>) {
         val adapterr = PermissionAdapter(listPermission)
         rvPermission.apply {
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
