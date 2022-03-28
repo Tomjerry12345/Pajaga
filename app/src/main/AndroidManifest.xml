@@ -68,14 +68,18 @@
         <service android:name=".service.handphone.NotifService" /> <!-- Last Configuration -->
         <!-- Activity -->
         <activity
-            android:name=".ui.autentikasi.AutentikasiActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-<!--                <action android:name=".ui.autentikasi.AutentikasiActivity" />-->
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.autentikasi.AutentikasiActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true" />
@@ -85,12 +89,12 @@
         <activity
             android:name=".ui.TestingActivity"
             android:exported="true" />
-
         <activity
             android:name=".ui.main.profil.ProfilActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="ProfilActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
