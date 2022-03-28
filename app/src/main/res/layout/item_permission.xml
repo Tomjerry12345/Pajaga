@@ -48,6 +48,7 @@
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@id/number"
                 style="@style/titleName"
+                android:textSize="@dimen/_12sp"
                 android:text="@{itemPermission.title}" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial

@@ -51,16 +51,26 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private var listPermission: ArrayList<Permission> = ArrayList()
 
+    val listValuePermission = listOf(
+        Permission("1","ACCESS_FINE_LOCATION",false),
+        Permission("2","ACCESS_WIFI_STATE",false),
+        Permission("3","ACCESS_COARSE_LOCATION",false),
+    )
+
+    var i = 0
+
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
 //            Log.e("DEBUG", )
                 showLogAssert("requestMultiplePermissions", "${it.key} = ${it.value}")
                 locationPermissionGranted = it.value
-                listPermission.add(Permission("1", it.key, it.value))
+                listPermission.add(Permission(listValuePermission[i].id, listValuePermission[i].title, it.value))
+                i++
             }
             getDeviceLocation()
             viewModel.setDataPermission(listPermission)
+            i = 0
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

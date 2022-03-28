@@ -39,5 +39,6 @@ fun switchPermission(view: SwitchMaterial, value: Boolean?) {
 //    if (url == false) View.GONE.also { view.visibility = it } else view.visibility = View.VISIBLE
     if (value != null) {
         view.isChecked = value
+        view.isClickable = !value
     }
 }

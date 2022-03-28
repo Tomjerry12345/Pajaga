@@ -49,14 +49,12 @@ class NotifService : Service() {
                 if (direction == -1) {
                     val i = SavedData.getInt(Constant.SUM_PLUS)
                     SavedData.setInt(Constant.SUM_PLUS, i.plus(1))
-                    showLogAssert("direction", "$i")
                     if (i == 2) {
                         SavedData.setInt(Constant.SUM_PLUS, 0)
-                        showLogAssert("token", FirebaseService.token.toString())
                         PushNotification(
                             NotificationData("HELP!!!", "Your friend in a danger situation"),
                             TOPIC,
-                            Notification("HELP 1!!!", "Your friend in a danger situation 1")
+                            Notification("HELP !!!", "Your friend in a danger situation")
 //                            FirebaseService.token!!
                         ).also {
                             val testingViewModel = viewModel as HomeViewModel
