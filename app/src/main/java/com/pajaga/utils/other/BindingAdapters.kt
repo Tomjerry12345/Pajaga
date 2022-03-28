@@ -5,17 +5,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.pajaga.R
 
 @BindingAdapter("showImage")
-fun showImage(imgView: ImageView, url: Int?){
+fun showImage(imgView: ImageView, url: Int?) {
     Glide.with(imgView.context)
         .load(url)
         .placeholder(R.drawable.orang)
         .into(imgView)
 }
+
 @BindingAdapter("showImageUrl")
-fun showImageUrl(imgView: ImageView, url: String?){
+fun showImageUrl(imgView: ImageView, url: String?) {
     Glide.with(imgView.context)
         .load(url)
         .placeholder(R.drawable.orang)
@@ -23,11 +25,19 @@ fun showImageUrl(imgView: ImageView, url: String?){
 }
 
 @BindingAdapter("showFirstChar")
-fun showFirstChar(textView: TextView, url: String?){
-    textView.setText(url?.get(0).toString())
+fun showFirstChar(textView: TextView, url: String?) {
+    textView.text = url?.get(0).toString()
 }
 
 @BindingAdapter("visibilityLine")
-fun visibilityLine(view: View, url: Boolean?){
+fun visibilityLine(view: View, url: Boolean?) {
     if (url == false) View.GONE.also { view.visibility = it } else view.visibility = View.VISIBLE
+}
+
+@BindingAdapter("switchPermission")
+fun switchPermission(view: SwitchMaterial, value: Boolean?) {
+//    if (url == false) View.GONE.also { view.visibility = it } else view.visibility = View.VISIBLE
+    if (value != null) {
+        view.isChecked = value
+    }
 }

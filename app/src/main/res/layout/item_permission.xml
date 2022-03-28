@@ -54,13 +54,11 @@
                 android:id="@+id/switch_permission"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-
-                android:textOn="On"
-                android:textOff="Off"
                 android:theme="@style/SCBSwitch"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                switchPermission="@{itemPermission.status}"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
