@@ -58,7 +58,7 @@ class FirebaseService : FirebaseMessagingService() {
 
 //        playNotificationSound()
 
-        val pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification
+        val pathNotif = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notification2
 //
         val intent = Intent(this, ProfilActivity::class.java)
         // Create a Uri from an intent string. Use the result to create an Intent.

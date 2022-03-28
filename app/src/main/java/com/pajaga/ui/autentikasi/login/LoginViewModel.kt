@@ -24,8 +24,8 @@ class LoginViewModel(val firebaseDatabase: FirebaseDatabase, val activity: Fragm
 
     fun onMoveToHome(binding: LoginFragmentBinding, view: View) {
         try {
-            val email = email.value ?: throw Exception("Email tidak boleh kosong")
-            val password = password.value ?: throw Exception("Password tidak boleh kosong")
+            val email = email.value ?: throw Exception("Email cannot empty")
+            val password = password.value ?: throw Exception("Password cannot empty")
             binding.progressDialog.visibility = View.VISIBLE
             val timer = object : CountDownTimer(2000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {}
@@ -36,7 +36,7 @@ class LoginViewModel(val firebaseDatabase: FirebaseDatabase, val activity: Fragm
                         activity.finish()
                     } else {
                         binding.progressDialog.visibility = View.GONE
-                        showToast(view.context, "Email Atau Password salah")
+                        showToast(view.context, "Email Or Password Is Wrong")
                     }
 
                 }
