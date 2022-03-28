@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_16dp">
+        android:paddingHorizontal="@dimen/_16dp"
+        android:paddingBottom="@dimen/_16dp">
 
         <TextView
             android:id="@+id/number"

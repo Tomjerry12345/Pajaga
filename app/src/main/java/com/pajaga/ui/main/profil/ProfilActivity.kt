@@ -10,6 +10,7 @@ import com.google.android.material.button.MaterialButton
 import com.pajaga.R
 import com.pajaga.model.Contact
 import com.pajaga.ui.main.home.adapter.ContactAdapter
+import com.pajaga.ui.main.home.adapter.ContactDangerAdapter
 
 class ProfilActivity : AppCompatActivity() {
     val listContact = ArrayList<Contact>()
@@ -40,7 +41,6 @@ class ProfilActivity : AppCompatActivity() {
     fun setData() {
         listContact.add(Contact(R.drawable.orang, "Surya", "Brother"))
         listContact.add(Contact(R.drawable.orang1, "Dani", "Friend"))
-        listContact.add(Contact(R.drawable.orang2, "Pei", "Friend"))
         listContact.add(Contact(R.drawable.orang3, "Andri", "College", "", false))
         setRecContact()
 
@@ -48,7 +48,7 @@ class ProfilActivity : AppCompatActivity() {
 
     fun setRecContact() {
 
-        val adapterr = ContactAdapter(listContact)
+        val adapterr = ContactDangerAdapter(listContact)
         rvZone.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = adapterr
