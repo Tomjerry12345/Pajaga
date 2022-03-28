@@ -22,9 +22,6 @@
         android:theme="@style/Theme.MyBaseProjectAndroid"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity
-            android:name=".ui.main.profil.ProfilActivity"
-            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -87,7 +84,16 @@
             android:exported="true" /> <!-- Testing -->
         <activity
             android:name=".ui.TestingActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.main.profil.ProfilActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ProfilActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

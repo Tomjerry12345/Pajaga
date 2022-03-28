@@ -11,7 +11,8 @@ data class Notification(
     val title: String,
     val body: String,
     val android_channel_id: String = Constant.CHANNEL_ID,
-    val sound : String = "notification"
+    val sound : String = "notification2",
+    val click_action: String = "ProfilActivity"
 )
 
 data class PushNotification(
