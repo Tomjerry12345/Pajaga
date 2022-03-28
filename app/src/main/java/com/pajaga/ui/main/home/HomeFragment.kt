@@ -35,7 +35,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModel.Factory(binding.rvContact, binding.rvZone)
+        HomeViewModel.Factory(binding.rvContact, binding.rvZone, binding.rvPermission)
     }
 
     private lateinit var binding: HomeFragmentBinding
@@ -64,6 +64,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding = HomeFragmentBinding.bind(view)
         viewModel.setData()
         viewModel.setDataZone()
+        viewModel.setDataPermission()
 
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
         placesClient = Places.createClient(requireActivity())
