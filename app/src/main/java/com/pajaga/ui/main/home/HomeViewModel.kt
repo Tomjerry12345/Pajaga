@@ -40,9 +40,9 @@ class HomeViewModel(val rvContact : RecyclerView, val rvZone: RecyclerView ,val 
 
     fun setData(){
         listContact.add(Contact(R.drawable.orang,"Surya","Brother"))
-        listContact.add(Contact(R.drawable.orang,"Dani","Friend"))
-        listContact.add(Contact(R.drawable.orang,"Pei","Friend"))
-        listContact.add(Contact(R.drawable.orang,"Andri","College"))
+        listContact.add(Contact(R.drawable.orang1,"Dani","Friend"))
+        listContact.add(Contact(R.drawable.orang2,"Pei","Friend"))
+        listContact.add(Contact(R.drawable.orang3,"Andri","College"))
         setRecContact()
 
     }
