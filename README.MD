@@ -4,13 +4,13 @@
    ```sh 
    git clone https://github.com/Tomjerry12345/Pajaga.git
    ```
-### 2. Tambahkan kode di bawah ke file local.properties
+### 2. Add the code below to the local.properties file
    ```sh 
    MAPS_API_KEY=AIzaSyDw8Okvy_nDvIDag6QXXHsXKgTvPQtEk8Y
    ```
-### 3. Aktifkan debugging usb pada smartphone
+### 3. Enable usb debugging on smartphones
 ### 4. Run project
-### 5. Login menggunakan
+### 5. Login using
    #### Email
    ```sh 
    test@gmail.com
