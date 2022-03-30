@@ -1,5 +1,4 @@
 # Instalasi
 
-1. ## Clone project
-2. ## AKtifkan USB debugging di smartphone
-3. ## Run project
+1. ## Clone repo
+2. ## > https://github.com/Tomjerry12345/Pajaga.git
