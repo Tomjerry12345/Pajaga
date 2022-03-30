@@ -2,7 +2,7 @@
 
 ### 1. Clone repo
    ```sh 
-   https://github.com/Tomjerry12345/Pajaga.git
+   git clone https://github.com/Tomjerry12345/Pajaga.git
    ```
 ### 2. Tambahkan kode di bawah ke file local.properties
    ```sh 
