@@ -20,23 +20,15 @@
 
             <ImageView
                 android:id="@+id/img_icon"
-                android:layout_width="@dimen/_40dp"
+                android:layout_width="@dimen/_100dp"
                 android:layout_height="@dimen/_40dp"
                 android:layout_marginStart="@dimen/_16dp"
                 android:layout_marginTop="@dimen/_16dp"
-                android:src="@drawable/icon"
+                android:src="@drawable/ic_logo_biru_pajaga"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                style="@style/TitleInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pajaga"
-                android:textSize="@dimen/_23dp"
-                app:layout_constraintBottom_toBottomOf="@id/img_icon"
-                app:layout_constraintStart_toEndOf="@id/img_icon"
-                app:layout_constraintTop_toTopOf="@id/img_icon" />
+
 
             <ImageView
                 android:id="@+id/profile"
@@ -153,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Make sure ALL of this permission active"
+                android:text="Make sure all of this permission active"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title_permission" />
 
