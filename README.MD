@@ -1,4 +1,4 @@
-# Instalasi
+# Installation
 
 ### 1. Clone repo
    ```sh 
