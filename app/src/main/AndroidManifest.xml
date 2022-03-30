@@ -82,13 +82,13 @@
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.examples.ExamplesActivity"
-            android:exported="true" /> <!-- Testing -->
+            android:exported="false" /> <!-- Testing -->
         <activity
             android:name=".ui.TestingActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.main.profil.ProfilActivity"
             android:exported="false">
