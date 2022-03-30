@@ -9,7 +9,7 @@
    MAPS_API_KEY=AIzaSyDw8Okvy_nDvIDag6QXXHsXKgTvPQtEk8Y
    ```
 ### 3. Enable usb debugging on smartphones
-### 4. Run project
+### 4. Open and Run project on Android Studio
 ### 5. Login using
    #### Email
    ```sh 
@@ -19,3 +19,5 @@
    ```sh 
    55555
    ```
+ 
+
